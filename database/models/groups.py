@@ -1,22 +1,27 @@
-import asyncio
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
-from database.models import Base, Group, Schedule
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.asyncio import async_session
+from sqlalchemy.orm import relationship
 
-# Конфигурация базы данных
-DATABASE_URL = "sqlite+aiosqlite:///./database.db"
-
-# Создаем движок и фабрику сессий
-engine = create_async_engine(DATABASE_URL, echo=True)
-async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+from database.models.schedules import Schedule
 
 
-async def init_db():
+class Group(Base):
     """
-    Инициализация базы данных: создание таблиц.
+    Модель группы студентов.
     """
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    __tablename__ = "groups"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, unique=True, nullable=False)
+
+    # Связь с расписанием
+    schedules = relationship("Schedule", back_populates="group", cascade="all, delete-orphan")
+
+    # Связь с пользователями
+    users = relationship("User", back_populates="group", cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"<Group(id={self.id}, name={self.name})>"
 
 
 async def fill_database():
@@ -49,4 +54,3 @@ async def fill_database():
 
         # Сохраняем изменения в базе данных
         await session.commit()
-
