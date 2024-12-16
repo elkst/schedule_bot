@@ -9,11 +9,13 @@ DATABASE_URL = "sqlite+aiosqlite:///./database.db"
 engine = create_async_engine(DATABASE_URL, echo=True)
 
 # Создание фабрики сессий для работы с базой данных
-async_session = sessionmaker(
-    bind=engine,
-    class_=AsyncSession,
-    expire_on_commit=False
-)
+async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+
+
+async def get_session() -> AsyncSession:
+    async with async_session() as session:
+        yield session
+
 
 # Функция инициализации базы данных
 async def init_db():
