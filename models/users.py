@@ -1,5 +1,9 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.future import select
+from sqlalchemy.exc import IntegrityError
+from database.database import async_session
+from models.groups import Group
 
 
 class User(Base):
@@ -18,12 +22,6 @@ class User(Base):
 
     def __repr__(self):
         return f"<User(id={self.id}, telegram_id={self.telegram_id}, full_name={self.full_name}, group_id={self.group_id})>"
-
-from sqlalchemy.future import select
-from sqlalchemy.exc import IntegrityError
-from database.database import async_session
-from database.database import User, Group
-
 
 async def add_user(telegram_id: int, full_name: str, group_name: str = None):
     """

@@ -3,10 +3,11 @@ from aiogram.types import BotCommand
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram_dialog import setup_dialogs
 import asyncio
+
+from database.database import init_db
 from dialogs.schedule_dialog import schedule_dialog
 from middlewares.auth import AuthMiddleware
 from handlers import admin, user
-from database import init_db
 from config import Config
 
 

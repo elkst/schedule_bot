@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.asyncio import async_session
 from sqlalchemy.orm import relationship
 
-from database.database import Schedule
+from models.schedules import Schedule
 
 
 class Group(Base):
