@@ -50,15 +50,3 @@ async def fill_database():
         # Сохраняем изменения в базе данных
         await session.commit()
 
-
-async def main():
-    # Создаем таблицы
-    await init_db()
-
-    # Заполняем таблицы тестовыми данными
-    await fill_database()
-    print("База данных успешно заполнена!")
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
