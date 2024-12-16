@@ -3,9 +3,11 @@ from aiogram_dialog.widgets.kbd import Button, Group, Select, Cancel
 from aiogram_dialog.widgets.text import Const, Format
 from aiogram_dialog.manager.manager import DialogManager
 from aiogram.types import CallbackQuery
+from sqlalchemy.ext.asyncio import async_session
+
+from database.models import Schedule
 from states.user_states import UserStates
-from database import async_session
-from database import Group, Schedule
+
 from sqlalchemy.future import select
 
 
