@@ -36,7 +36,7 @@ async def main():
     await init_db()
 
     # Настраиваем aiogram-dialog
-    setup_dialogs(dp, admin_dialog, schedule_dialog)
+    setup_dialogs(dp, schedule_dialog)
 
     # Регистрируем обработчики
     admin.register_handlers(dp)
