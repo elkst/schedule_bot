@@ -4,8 +4,8 @@ from aiogram_dialog.widgets.text import Const, Format
 from aiogram_dialog.manager.manager import DialogManager
 from aiogram.types import CallbackQuery
 from states.user_states import UserStates
-from database.database import async_session
-from database.database import Group, Schedule
+from database import async_session
+from database import Group, Schedule
 from sqlalchemy.future import select
 
 

@@ -4,8 +4,8 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQu
 from aiogram.fsm.context import FSMContext
 from sqlalchemy import select
 
-from database.database import async_session
-from database.database import Group, Schedule
+from database import async_session
+from database import Group, Schedule
 from states.user_states import UserStates  # Импортируем состояния
 
 router = Router()
@@ -77,7 +77,6 @@ async def select_group(callback_query: CallbackQuery, state: FSMContext):
             inline_keyboard=[
                 [InlineKeyboardButton(text="Показать расписание", callback_data="view_schedule")],
                 [InlineKeyboardButton(text="Изменить группу", callback_data="change_group")],
-
 
             ]
         )

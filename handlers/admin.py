@@ -4,12 +4,13 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQu
 from aiogram.fsm.context import FSMContext
 from sqlalchemy import select
 
-from database.database import async_session
-from database.database import Group
+from database import async_session
+from database import Group
 from states.user_states import UserStates
 from config import Config  # Импортируем конфиг для доступа к ADMIN_ID
 
 router = Router()
+
 
 # === Хэндлер вызова панели администратора === #
 @router.message(Command("admin"))
@@ -30,6 +31,7 @@ async def admin_panel(message: types.Message, state: FSMContext):
     ])
     await message.answer("Добро пожаловать в панель администратора:", reply_markup=keyboard)
 
+
 # === Хэндлер для добавления новой группы === #
 @router.callback_query(lambda c: c.data == "admin_add_group")
 async def add_group(callback_query: CallbackQuery, state: FSMContext):
@@ -38,6 +40,7 @@ async def add_group(callback_query: CallbackQuery, state: FSMContext):
     """
     await callback_query.message.answer("Введите название новой группы:")
     await state.set_state(UserStates.adding_group)
+
 
 @router.message(UserStates.adding_group)
 async def save_group(message: types.Message, state: FSMContext):
@@ -62,6 +65,7 @@ async def save_group(message: types.Message, state: FSMContext):
 
     await state.clear()
 
+
 # === Хэндлер для удаления группы === #
 @router.callback_query(lambda c: c.data == "admin_delete_group")
 async def delete_group_start(callback_query: CallbackQuery):
@@ -84,6 +88,7 @@ async def delete_group_start(callback_query: CallbackQuery):
     )
     await callback_query.message.answer("Выберите группу для удаления:", reply_markup=keyboard)
 
+
 @router.callback_query(lambda c: c.data.startswith("delete_group_"))
 async def delete_group(callback_query: CallbackQuery):
     """
@@ -99,6 +104,7 @@ async def delete_group(callback_query: CallbackQuery):
         await session.delete(group)
         await session.commit()
         await callback_query.message.answer(f"Группа '{group.name}' успешно удалена.")
+
 
 # === Хэндлер для просмотра всех групп === #
 @router.callback_query(lambda c: c.data == "admin_view_groups")
@@ -116,6 +122,7 @@ async def view_groups(callback_query: CallbackQuery):
 
     groups_text = "\n".join([f"- {group.name}" for group in groups])
     await callback_query.message.answer(f"Список групп:\n{groups_text}")
+
 
 # === Регистрация хэндлеров === #
 def register_handlers(dp: Router):
