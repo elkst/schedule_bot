@@ -6,8 +6,8 @@ from aiogram.fsm.state import State, StatesGroup
 from sqlalchemy import select
 
 from database import async_session
-from models.groups import Group
-from models.schedules import Schedule
+from database.methods.user_settings import Group
+from database.methods.schedules import Schedule
 
 
 # Создаем группу состояний для FSM

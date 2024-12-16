@@ -7,7 +7,7 @@ from sqlalchemy import select
 from database import async_session
 from database import Group
 from states.user_states import UserStates
-from config import Config  # Импортируем конфиг для доступа к ADMIN_ID
+from config_data.config import Config  # Импортируем конфиг для доступа к ADMIN_ID
 
 router = Router()
 

@@ -1,6 +1,6 @@
 from aiogram.types import Update
 from aiogram.dispatcher.middlewares.base import BaseMiddleware
-from config import Config
+from config_data.config import Config
 
 
 class AuthMiddleware(BaseMiddleware):

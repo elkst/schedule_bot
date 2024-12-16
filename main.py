@@ -8,7 +8,7 @@ from database import init_db
 from dialogs.schedule_dialog import schedule_dialog
 from middlewares.auth import AuthMiddleware
 from handlers import admin, user
-from config import Config
+from config_data.config import Config
 
 
 async def set_commands(bot: Bot):
