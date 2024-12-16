@@ -2,8 +2,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram_dialog import setup_dialogs
-
-from dialogs.admin_dialog import admin_dialog
+import asyncio
 from dialogs.schedule_dialog import schedule_dialog
 from middlewares.auth import AuthMiddleware
 from handlers import admin, user
@@ -51,5 +50,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    import asyncio
     asyncio.run(main())
