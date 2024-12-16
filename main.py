@@ -6,7 +6,7 @@ import asyncio
 from dialogs.schedule_dialog import schedule_dialog
 from middlewares.auth import AuthMiddleware
 from handlers import admin, user
-from database.database import init_db
+from database import init_db
 from config import Config
 
 

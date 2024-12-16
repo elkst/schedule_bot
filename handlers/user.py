@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from sqlalchemy import select
 
 from database.database import async_session
-from database.models import Group, Schedule
+from database.database import Group, Schedule
 from states.user_states import UserStates  # Импортируем состояния
 
 router = Router()

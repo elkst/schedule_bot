@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from sqlalchemy import select
 
 from database.database import async_session
-from database.models import Group
+from database.database import Group
 from states.user_states import UserStates
 from config import Config  # Импортируем конфиг для доступа к ADMIN_ID
 
