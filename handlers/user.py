@@ -2,11 +2,19 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 from sqlalchemy import select
 
 from database import async_session
-from database import Group, Schedule
-from states.user_states import UserStates  # Импортируем состояния
+from models.groups import Group
+from models.schedules import Schedule
+
+
+# Создаем группу состояний для FSM
+class UserStates(StatesGroup):
+    group_selection = State()
+    viewing_schedule = State()
+
 
 router = Router()
 
@@ -33,8 +41,9 @@ async def generate_groups_keyboard():
     Генерирует клавиатуру с кнопками доступных групп.
     """
     async with async_session() as session:
-        result = await session.execute(select(Group))
-        groups = result.scalars().all()
+        async with session.begin():  # Используем контекстный менеджер с транзакцией
+            result = await session.execute(select(Group))
+            groups = result.scalars().all()
 
     if not groups:
         return InlineKeyboardMarkup(
@@ -59,7 +68,8 @@ async def select_group(callback_query: CallbackQuery, state: FSMContext):
     group_id = int(callback_query.data.split("_")[1])
 
     async with async_session() as session:
-        group = await session.get(Group, group_id)
+        async with session.begin():
+            group = await session.get(Group, group_id)
 
     if not group:
         await callback_query.message.answer("Выбранная группа не найдена. Попробуйте снова.")
@@ -77,7 +87,6 @@ async def select_group(callback_query: CallbackQuery, state: FSMContext):
             inline_keyboard=[
                 [InlineKeyboardButton(text="Показать расписание", callback_data="view_schedule")],
                 [InlineKeyboardButton(text="Изменить группу", callback_data="change_group")],
-
             ]
         )
     )
@@ -97,10 +106,11 @@ async def view_schedule(callback_query: CallbackQuery, state: FSMContext):
         return
 
     async with async_session() as session:
-        result = await session.execute(
-            select(Schedule).where(Schedule.group_id == group_id).order_by(Schedule.day, Schedule.time)
-        )
-        schedules = result.scalars().all()
+        async with session.begin():
+            result = await session.execute(
+                select(Schedule).where(Schedule.group_id == group_id).order_by(Schedule.day, Schedule.time)
+            )
+            schedules = result.scalars().all()
 
     if not schedules:
         await callback_query.message.answer("Для выбранной группы расписание отсутствует.")
